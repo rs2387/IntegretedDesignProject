@@ -7,4 +7,4 @@ tim = Timer(-1)
 def tick(timer):
     led.toggle()
 
-tim.init(freq=400, mode=Timer.PERIODIC, callback=tick)
+tim.init(freq=400, mode=Timer.PERIODIC, callback=tick)git pul
