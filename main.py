@@ -2,7 +2,7 @@ from motor import Motor
 from utime import sleep
 
 motor3 = Motor(dirPin=4, PWMPin=5)
-motor4 = Motor(dirPin=6, PWMPin=7)
+motor4 = Motor(dirPin=7, PWMPin=6)
 
 
 def move_right():
