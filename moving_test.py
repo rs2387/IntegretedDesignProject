@@ -31,9 +31,9 @@ def move_forward(left_speed=68, right_speed=60):
     motor4.Forward(right_speed)
 
 
-def move_back():
-    motor3.Reverse()
-    motor4.Reverse()
+def move_back(left_speed=34, right_speed=30):
+    motor3.Reverse(left_speed)
+    motor4.Reverse(right_speed)
 
 
 def stop_motor():
@@ -101,6 +101,26 @@ def left_pivot_90(TURN_SPEED):
     stop_motor()
     sleep(1)
 
+def reverse_after_pivot():
+    stop_motor()
+    sleep(1)
+    move_back()
+    sleep(1)
+    while True:
+        move_back()
+        ml = middle_left_sensor.value()
+        mr = middle_right_sensor.value()
+        fl = front_left_sensor.value()
+        fr = front_right_sensor.value()
+        if mr == 1 and ml == 1 and fr ==1 and fl ==1:
+            break
+    stop_motor()
+    sleep(1)
+    move_forward()
+    sleep(1)
+    stop_motor()
+    sleep(1)
+
 # not useful right now interacts with too many lines
 def pivot_180(TURN_SPEED):
     stop_motor()
@@ -141,7 +161,10 @@ while True:
     if fr == 1 and mr == 1 and ml == 1 and fl == 1:
         stop_motor()
         sleep(1)
-        pivot_180(TURN_SPEED)
+        reverse_after_pivot()
+        right_pivot_90(TURN_SPEED)
+        # not useful right now too complicated
+        # pivot_180(TURN_SPEED)
 
     elif fr == 1 and mr == 1 and fl == 0:
         print("Right turn detected")
