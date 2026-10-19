@@ -26,12 +26,12 @@ button = Pin(21, Pin.IN)
 # Movement functions
 # --------------------------
 
-def move_forward(left_speed=68, right_speed=60):
+def move_forward(left_speed=62, right_speed=60):
     motor3.Forward(left_speed)
     motor4.Forward(right_speed)
 
 
-def move_back(left_speed=34, right_speed=30):
+def move_back(left_speed=32, right_speed=30):
     motor3.Reverse(left_speed)
     motor4.Reverse(right_speed)
 
@@ -59,13 +59,14 @@ CONTINUE_TIME = 1
 TURN_SPEED = 60
 
 
-def right_pivot_90(TURN_SPEED):
+def right_pivot_90(TURN_SPEED, forward=True):
     stop_motor()
     sleep(1)
-    move_forward()
-    sleep(CONTINUE_TIME)
-    stop_motor()
-    sleep(1)
+    if forward:
+        move_forward()
+        sleep(CONTINUE_TIME)
+        stop_motor()
+        sleep(1)
     condition1 = False
     while True:
         fr = front_right_sensor.value()
@@ -75,19 +76,21 @@ def right_pivot_90(TURN_SPEED):
         motor4.Reverse(speed=TURN_SPEED)
         ml = middle_left_sensor.value()
         if condition1 == True and ml == 1:
+            sleep(0.05)
             break
     stop_motor()
     sleep(1)
     
 
 
-def left_pivot_90(TURN_SPEED):
+def left_pivot_90(TURN_SPEED, forward=True):
     stop_motor()
     sleep(1)
-    move_forward()
-    sleep(CONTINUE_TIME)
-    stop_motor()
-    sleep(1)
+    if forward:
+        move_forward()
+        sleep(CONTINUE_TIME)
+        stop_motor()
+        sleep(1)
     condition1 = False
     while True:
         fl = front_left_sensor.value()
@@ -97,6 +100,7 @@ def left_pivot_90(TURN_SPEED):
         motor4.Forward(speed=TURN_SPEED)
         mr = middle_right_sensor.value()
         if condition1 == True and mr == 1:
+            sleep(0.05)
             break
     stop_motor()
     sleep(1)
@@ -137,57 +141,11 @@ def pivot_180(TURN_SPEED):
             condition2 = True
         motor3.Reverse(speed=TURN_SPEED)
         motor4.Forward(speed=TURN_SPEED)
+        sleep(0.3)
         mr = middle_right_sensor.value()
         if condition2 == True and mr == 1:
+            sleep(0.25)
             break
     stop_motor()
     sleep(1)
-    move_forward()
-    sleep(1)
 
-# --------------------------
-# main line-following loop
-# --------------------------
-
-while True:
-
-    # read all sensors
-    ml = middle_left_sensor.value()
-    mr = middle_right_sensor.value()
-    fl = front_left_sensor.value()
-    fr = front_right_sensor.value()
-
-    # Detect pick up first, then turns, then adjusts
-    if fr == 1 and mr == 1 and ml == 1 and fl == 1:
-        stop_motor()
-        sleep(1)
-        reverse_after_pivot()
-        right_pivot_90(TURN_SPEED)
-        # not useful right now too complicated
-        # pivot_180(TURN_SPEED)
-
-    elif fr == 1 and mr == 1 and fl == 0:
-        print("Right turn detected")
-        right_pivot_90(TURN_SPEED)
-
-    elif fr == 0 and fl == 1 and ml == 1:
-        print("Left turn detected")
-        left_pivot_90(TURN_SPEED)
-
-    # Follow the line using the middle sensors
-    if ml == 0 and mr == 0:
-        print("Move forward")
-        move_forward()
-
-    elif ml == 0 and mr == 1:
-        print("Adjust right")
-        adjust_right()
-
-    elif ml == 1 and mr == 0:
-        print("Adjust left")
-        adjust_left()
-
-    else:
-        print("Line lost")
-
-    sleep(0.05)
