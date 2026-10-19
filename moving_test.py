@@ -55,7 +55,7 @@ def adjust_right(speed=70, adjustment=20):
 # Turning parameters
 # --------------------------
 
-CONTINUE_TIME = 1
+CONTINUE_TIME = 1.1
 TURN_SPEED = 60
 
 
@@ -148,4 +148,3 @@ def pivot_180(TURN_SPEED):
             break
     stop_motor()
     sleep(1)
-
