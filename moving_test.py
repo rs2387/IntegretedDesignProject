@@ -128,7 +128,7 @@ def reverse_after_pivot():
 # not useful right now interacts with too many lines
 def pivot_180(TURN_SPEED):
     stop_motor()
-    sleep(1)
+    sleep(0.5)
     move_forward()
     sleep(0.5)
     condition1, condition2= False, False
