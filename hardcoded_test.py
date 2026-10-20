@@ -185,7 +185,7 @@ if __name__ == "__main__":
                 right_pivot_90(TURN_SPEED)
                 stop_motor()
 
-            
+        sleep(0.05)
             
 
 

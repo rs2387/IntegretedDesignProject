@@ -9,8 +9,12 @@ from moving_test import (
 )
 from utime import sleep
 from machine import Pin
+from motor import Motor
 
-# Motors are already declared in moving_test.py
+motor3 = Motor(dirPin=4, PWMPin=5)
+motor4 = Motor(dirPin=7, PWMPin=6)
+
+# Functions are in wierd files but dont want to cause merge conflict
 
 # --------------------------
 # Assign sensors
@@ -50,71 +54,149 @@ if __name__ == "__main__":
         fr = front_right_sensor.value()
         return fr, mr, ml, fl
 
+    def bay_left_90(TURN_SPEED, forward=True):
+        stop_motor()
+        sleep(1)
+        if forward:
+            move_forward()
+            sleep(CONTINUE_TIME)
+            stop_motor()
+            sleep(1)
+
+ 
+        motor3.Reverse(speed=TURN_SPEED)
+        motor4.Forward(speed=TURN_SPEED)
+        sleep(1)
+
+        while True:
+            motor3.Reverse(speed=TURN_SPEED)
+            motor4.Forward(speed=TURN_SPEED)
+            mr = middle_right_sensor.value()
+            if mr == 1:
+                #sleep(0.05)
+                break
+        stop_motor()
+        sleep(1)
+
+    def bay_left_180(TURN_SPEED):
+        stop_motor()
+        sleep(1)
+   
+        motor3.Reverse(speed=TURN_SPEED)
+        motor4.Forward(speed=TURN_SPEED)
+        sleep(2)
+        
+        while True:
+            motor3.Reverse(speed=TURN_SPEED)
+            motor4.Forward(speed=TURN_SPEED)
+            mr = middle_right_sensor.value()
+            if mr == 1:
+                #sleep(0.05)
+                break
+        stop_motor()
+        sleep(1)
+         
+
+
     sleep(10)
     count = 0
 
-    try:
-        while True:
-            # read all sensors
+    while True:
+        fr, mr, ml, fl = get_sensors()
 
-            fr, mr, ml, fl = get_sensors()
+        if count == 0:
+            right_pivot_90(TURN_SPEED, forward=False)
+            move_forward()
+            sleep(1.5)
+            count = 1
+            continue
 
-            if count == 0:
-                right_pivot_90(TURN_SPEED, forward=False)
-                move_forward()
-                sleep(1.5)
-                count = 1
-                continue
+                 # Follow the line using the middle sensors
+        if [fl, ml, mr, fr] == [0, 0, 0, 0]:
+            #print("Move forward")
+            move_forward()
 
-            # Detect pick up first, then turns, then adjusts
-            if fr == 1 and mr == 1 and ml == 1 and fl == 1:
-                stop_motor()
-                reverse_180()
-                continue
+        elif [fl, ml, mr, fr] == [0, 0, 1, 0]:
+            #print("Adjust right")
+            adjust_right()
 
-            elif fr == 1 and mr == 1 and fl == 0:
-                move_forward()
-                sleep(0.05) # a sleep to make sure its a junction left not a bay
-                fr, mr, ml, fl = get_sensors()
-                if fr == 1 and mr == 1 and fl == 0:
-                    #print("Right turn detected")
-                    right_pivot_90(TURN_SPEED, forward=True)
-                elif fr == 1 and mr == 1 and ml == 1 and fl == 1:
-                    reverse_180()
-                continue
-
-            elif fr == 0 and fl == 1 and ml == 1:
-                move_forward()
-                sleep(0.05) # a sleep to make sure its a junction left not a bay
-                fr, mr, ml, fl = get_sensors()
-                if fr == 0 and fl == 1 and ml == 1:
-                    #print("left turn detected")
-                    left_pivot_90(TURN_SPEED, forward=True)
-                elif fr == 1 and mr == 1 and ml == 1 and fl == 1:
-                    reverse_180()
-                continue
-
-            # Follow the line using the middle sensors
-            if ml == 0 and mr == 0:
-                #print("Move forward")
-                move_forward()
-
-            elif ml == 0 and mr == 1:
-                #print("Adjust right")
-                adjust_right()
-
-            elif ml == 1 and mr == 0:
+        elif [fl, ml, mr, fr] == [0, 1, 0, 0]:
                 #print("Adjust left")
-                adjust_left()
+            adjust_left()
 
-            elif mr == 1 and ml == 1:
+        elif [fl, ml, mr, fr] == [0, 1, 1, 0]:
+            move_forward()
+
+        else:
+            print("junction detected")
+
+#first corner
+            if count == 1:
+                left_pivot_90(TURN_SPEED)
+                count += 1
+
+#begining of bay 1
+            elif count == 2:
+                left_pivot_90(TURN_SPEED)
+                count += 1
+
+# turning in bay 1
+            elif count == 3:
+                reverse_180()
                 move_forward()
+                sleep(0.5)
+                left_pivot_90(TURN_SPEED, continue_time=0.6)
+                count += 1
+#skipping bay 2
+            elif count == 4:
+                move_forward()
+                sleep(1)
+                count += 1
 
-            else:
-                pass
-                #print("Line lost")
+#turn into loading bay, go forwards, then turn around
+            elif count == 5:
+                bay_left_90(TURN_SPEED)
+                move_forward()
+                sleep(2)
+                stop_motor()
+                sleep(1)
+                bay_left_180(TURN_SPEED)
+                count += 1
+#exit loading bay
+            elif count == 6:
+                right_pivot_90(TURN_SPEED)
+                count += 1
 
-            sleep(0.08)
+#skip next 2 bays
+            elif count == 7:
+                move_forward()
+                sleep(1)
+                count += 1
 
-    finally:
-        stop_motor()
+            elif count == 8:
+                move_forward()
+                sleep(1)
+                count += 1
+
+#right turn
+            elif count == 9:
+                right_pivot_90(TURN_SPEED)
+                count += 1
+
+            elif count == 10:
+                move_forward()
+                sleep(1)
+                count += 1
+
+#stop in centre
+            elif count == 11:
+                right_pivot_90(TURN_SPEED)
+                stop_motor()
+                sleep(10)
+                break
+
+        sleep(0.05)
+            
+
+
+            

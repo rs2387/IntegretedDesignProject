@@ -55,16 +55,16 @@ def adjust_right(speed=70, adjustment=20):
 # Turning parameters
 # --------------------------
 
-CONTINUE_TIME = 1.1
+CONTINUE_TIME = 1.05
 TURN_SPEED = 60
 
 
-def right_pivot_90(TURN_SPEED, forward=True):
+def right_pivot_90(TURN_SPEED, forward=True, continue_time=CONTINUE_TIME):
     stop_motor()
     sleep(1)
     if forward:
         move_forward()
-        sleep(CONTINUE_TIME)
+        sleep(continue_time)
         stop_motor()
         sleep(1)
     condition1 = False
@@ -83,12 +83,12 @@ def right_pivot_90(TURN_SPEED, forward=True):
     
 
 
-def left_pivot_90(TURN_SPEED, forward=True):
+def left_pivot_90(TURN_SPEED, forward=True, continue_time=CONTINUE_TIME):
     stop_motor()
     sleep(1)
     if forward:
         move_forward()
-        sleep(CONTINUE_TIME)
+        sleep(continue_time)
         stop_motor()
         sleep(1)
     condition1 = False
