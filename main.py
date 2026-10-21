@@ -1,4 +1,4 @@
-from moving_test import (
+from movement import (
     stop_motor,
     pivot_180,
     left_pivot_90,
@@ -6,6 +6,8 @@ from moving_test import (
     move_forward,
     adjust_left,
     adjust_right,
+    reverse_180,
+    bay_left_180
 )
 from utime import sleep
 from machine import Pin
@@ -36,67 +38,13 @@ TURN_SPEED = 60
 
 if __name__ == "__main__":
 
-    def reverse_180():
-        stop_motor()
-        sleep(1)
-        #reverse_after_pivot()
-        #right_pivot_90(TURN_SPEED)
-        # not useful right now too complicated
-        pivot_180(TURN_SPEED)
-        #
-        sleep(1)
-        left_pivot_90(TURN_SPEED, forward=False)
-
     def get_sensors():
         ml = middle_left_sensor.value()
         mr = middle_right_sensor.value()
         fl = front_left_sensor.value()
         fr = front_right_sensor.value()
         return fr, mr, ml, fl
-
-    def bay_left_90(TURN_SPEED, forward=True):
-        stop_motor()
-        sleep(1)
-        if forward:
-            move_forward()
-            sleep(CONTINUE_TIME)
-            stop_motor()
-            sleep(1)
-
- 
-        motor3.Reverse(speed=TURN_SPEED)
-        motor4.Forward(speed=TURN_SPEED)
-        sleep(1)
-
-        while True:
-            motor3.Reverse(speed=TURN_SPEED)
-            motor4.Forward(speed=TURN_SPEED)
-            mr = middle_right_sensor.value()
-            if mr == 1:
-                #sleep(0.05)
-                break
-        stop_motor()
-        sleep(1)
-
-    def bay_left_180(TURN_SPEED):
-        stop_motor()
-        sleep(1)
-   
-        motor3.Reverse(speed=TURN_SPEED)
-        motor4.Forward(speed=TURN_SPEED)
-        sleep(2)
-        
-        while True:
-            motor3.Reverse(speed=TURN_SPEED)
-            motor4.Forward(speed=TURN_SPEED)
-            mr = middle_right_sensor.value()
-            if mr == 1:
-                #sleep(0.05)
-                break
-        stop_motor()
-        sleep(1)
          
-
 
     sleep(10)
     count = 0
@@ -155,7 +103,7 @@ if __name__ == "__main__":
 
 #turn into loading bay, go forwards, then turn around
             elif count == 5:
-                bay_left_90(TURN_SPEED)
+                left_pivot_90(TURN_SPEED, sleeping=True)
                 move_forward()
                 sleep(2)
                 stop_motor()

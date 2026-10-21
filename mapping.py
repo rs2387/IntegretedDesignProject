@@ -1,4 +1,4 @@
-from moving import turn_right, turn_left
+from movement import right_pivot_90, left_pivot_90
 
 # class for the map with different checkpoints/ states as methods
 
@@ -10,7 +10,7 @@ class Map:
         
     def start(self):
         self.turning = True
-        turn_right()
+        right_pivot_90()
 
 
     def right_bay(self, turning:bool, moving:bool):
