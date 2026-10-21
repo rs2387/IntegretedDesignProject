@@ -1,13 +1,12 @@
 from movement import (
     stop_motor,
-    pivot_180,
     left_pivot_90,
     right_pivot_90,
     move_forward,
     adjust_left,
     adjust_right,
     reverse_180,
-    bay_left_180
+    pivot_180
 )
 from utime import sleep
 from machine import Pin
@@ -29,8 +28,9 @@ middle_right_sensor = Pin(22, Pin.IN)
 
 button = Pin(21, Pin.IN)
 
-CONTINUE_TIME = 1.1
-TURN_SPEED = 60
+SKIP_TIME = 0.7  # The time it sleeps whilst moving over a junction it wants to skip
+CONTINUE_TIME = 1.1  # The time it creeps before pivoting 90 degrees
+TURN_SPEED = 60  # The speed at which the motors move during a turn
 
 # --------------------------
 # main line-following loop
@@ -76,7 +76,7 @@ if __name__ == "__main__":
             move_forward()
 
         else:
-            print("junction detected")
+            #print("junction detected")
 
 #first corner
             if count == 1:
@@ -88,17 +88,18 @@ if __name__ == "__main__":
                 left_pivot_90(TURN_SPEED)
                 count += 1
 
-# turning in bay 1
+# turning out of bay 1
             elif count == 3:
                 reverse_180()
                 move_forward()
                 sleep(0.5)
                 left_pivot_90(TURN_SPEED, continue_time=0.6)
                 count += 1
+                
 #skipping bay 2
             elif count == 4:
                 move_forward()
-                sleep(1)
+                sleep(SKIP_TIME)
                 count += 1
 
 #turn into loading bay, go forwards, then turn around
@@ -106,10 +107,11 @@ if __name__ == "__main__":
                 left_pivot_90(TURN_SPEED, sleeping=True)
                 move_forward()
                 sleep(2)
-                stop_motor()
-                sleep(1)
-                bay_left_180(TURN_SPEED)
+                #stop_motor()
+                #sleep(1)
+                pivot_180(TURN_SPEED, sleeping=True)
                 count += 1
+
 #exit loading bay
             elif count == 6:
                 right_pivot_90(TURN_SPEED)
@@ -118,12 +120,12 @@ if __name__ == "__main__":
 #skip next 2 bays
             elif count == 7:
                 move_forward()
-                sleep(1)
+                sleep(SKIP_TIME)
                 count += 1
 
             elif count == 8:
                 move_forward()
-                sleep(1)
+                sleep(SKIP_TIME)
                 count += 1
 
 #right turn
@@ -133,7 +135,7 @@ if __name__ == "__main__":
 
             elif count == 10:
                 move_forward()
-                sleep(1)
+                sleep(SKIP_TIME)
                 count += 1
 
 #stop in centre
