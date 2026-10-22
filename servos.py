@@ -62,8 +62,10 @@ def test_positions():
 current_arm_angle = 10 
 # need to know the current position before moving otherwise might break mechanism or servo
 
-base_servo.set_angle(0)
 
+arm_servo.set_angle(45) #0 is open, 45 is perfect for grabbing
+
+base_servo.set_angle(240)  #270 is the horizontal arm position
 
 def grab(current_arm_angle):
     arm_servo.set_angle(current_arm_angle+30) # close arms on box
