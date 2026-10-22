@@ -29,7 +29,7 @@ middle_right_sensor = Pin(22, Pin.IN)
 button = Pin(21, Pin.IN)
 
 SKIP_TIME = 0.7  # The time it sleeps whilst moving over a junction it wants to skip
-CONTINUE_TIME = 1.1  # The time it creeps before pivoting 90 degrees
+CONTINUE_TIME = 0.9  # The time it creeps before pivoting 90 degrees
 TURN_SPEED = 60  # The speed at which the motors move during a turn
 
 # --------------------------
@@ -80,12 +80,12 @@ if __name__ == "__main__":
 
 #first corner
             if count == 1:
-                left_pivot_90(TURN_SPEED)
+                left_pivot_90(TURN_SPEED, continue_time=CONTINUE_TIME)
                 count += 1
 
 #begining of bay 1
             elif count == 2:
-                left_pivot_90(TURN_SPEED)
+                left_pivot_90(TURN_SPEED, continue_time=CONTINUE_TIME)
                 count += 1
 
 # turning out of bay 1
@@ -95,7 +95,7 @@ if __name__ == "__main__":
                 sleep(0.5)
                 left_pivot_90(TURN_SPEED, continue_time=0.6)
                 count += 1
-                
+
 #skipping bay 2
             elif count == 4:
                 move_forward()
@@ -114,7 +114,7 @@ if __name__ == "__main__":
 
 #exit loading bay
             elif count == 6:
-                right_pivot_90(TURN_SPEED)
+                right_pivot_90(TURN_SPEED, continue_time=CONTINUE_TIME)
                 count += 1
 
 #skip next 2 bays
@@ -130,7 +130,7 @@ if __name__ == "__main__":
 
 #right turn
             elif count == 9:
-                right_pivot_90(TURN_SPEED)
+                right_pivot_90(TURN_SPEED, continue_time=CONTINUE_TIME)
                 count += 1
 
             elif count == 10:
@@ -140,7 +140,7 @@ if __name__ == "__main__":
 
 #stop in centre
             elif count == 11:
-                right_pivot_90(TURN_SPEED)
+                right_pivot_90(TURN_SPEED, continue_time=CONTINUE_TIME)
                 stop_motor()
                 sleep(10)
                 break
