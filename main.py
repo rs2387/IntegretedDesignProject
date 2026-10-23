@@ -6,7 +6,10 @@ from movement import (
     adjust_left,
     adjust_right,
     reverse_180,
-    pivot_180
+    pivot_180,
+    towards_box_magnet,
+    pick_up,
+    drop_off
 )
 from utime import sleep
 from machine import Pin
@@ -21,15 +24,15 @@ motor4 = Motor(dirPin=7, PWMPin=6)
 # Assign sensors
 # --------------------------
 
-front_left_sensor = Pin(28, Pin.IN)
-front_right_sensor = Pin(27, Pin.IN)
-middle_left_sensor = Pin(26, Pin.IN)
-middle_right_sensor = Pin(22, Pin.IN)
+front_left_sensor = Pin(21, Pin.IN)
+front_right_sensor = Pin(20, Pin.IN)
+middle_left_sensor = Pin(19, Pin.IN)
+middle_right_sensor = Pin(18, Pin.IN)
 
 button = Pin(21, Pin.IN)
 
 SKIP_TIME = 0.7  # The time it sleeps whilst moving over a junction it wants to skip
-CONTINUE_TIME = 0.9  # The time it creeps before pivoting 90 degrees
+CONTINUE_TIME = 1.05  # The time it creeps before pivoting 90 degrees
 TURN_SPEED = 60  # The speed at which the motors move during a turn
 
 # --------------------------
@@ -46,13 +49,14 @@ if __name__ == "__main__":
         return fr, mr, ml, fl
          
 
-    sleep(10)
+    sleep(5)
     count = 0
 
     while True:
         fr, mr, ml, fl = get_sensors()
 
         if count == 0:
+            drop_off()
             right_pivot_90(TURN_SPEED, forward=False)
             move_forward()
             sleep(1.5)
@@ -90,6 +94,7 @@ if __name__ == "__main__":
 
 # turning out of bay 1
             elif count == 3:
+                pick_up()
                 reverse_180()
                 move_forward()
                 sleep(0.5)
@@ -102,13 +107,13 @@ if __name__ == "__main__":
                 sleep(SKIP_TIME)
                 count += 1
 
-#turn into loading bay, go forwards, then turn around
+#turn into loading bay, pick up block, then turn around
             elif count == 5:
                 left_pivot_90(TURN_SPEED, sleeping=True)
                 move_forward()
                 sleep(2)
-                #stop_motor()
-                #sleep(1)
+                drop_off()
+ 
                 pivot_180(TURN_SPEED, sleeping=True)
                 count += 1
 

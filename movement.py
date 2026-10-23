@@ -1,6 +1,11 @@
 from motor import Motor
 from utime import sleep
-from machine import Pin
+from machine import Pin, ADC
+from servos import Servo
+
+hall_effect = ADC(26)
+def get_magnet():
+    return(hall_effect.read_u16())
 
 # --------------------------
 # Declare motors
@@ -9,15 +14,17 @@ from machine import Pin
 motor3 = Motor(dirPin=4, PWMPin=5)
 motor4 = Motor(dirPin=7, PWMPin=6)
 
+base_servo = Servo(Pin(15)) # Connected to Servo 1
+arm_servo = Servo(Pin(13)) # Connected to Servo 2
 
 # --------------------------
 # Assign sensors
 # --------------------------
 
-front_left_sensor = Pin(28, Pin.IN)
-front_right_sensor = Pin(27, Pin.IN)
-middle_left_sensor = Pin(26, Pin.IN)    
-middle_right_sensor = Pin(22, Pin.IN)  
+front_left_sensor = Pin(21, Pin.IN)
+front_right_sensor = Pin(20, Pin.IN)
+middle_left_sensor = Pin(19, Pin.IN)
+middle_right_sensor = Pin(18, Pin.IN)
 
 button = Pin(21, Pin.IN)
 
@@ -187,4 +194,87 @@ def reverse_180():
     
     #sleep(1)
     left_pivot_90(TURN_SPEED, forward=False)
+
+def get_distance():
+    #yet to do
+    print("hello")
+
+# def towards_box_range():
+#     while True:
+#         #distance = get_distance()
+#         ml = middle_left_sensor.value()
+#         mr = middle_right_sensor.value()
+#         fl = front_left_sensor.value()
+#         fr = front_right_sensor.value()
+
+#         if [fl, ml, mr, fr] == [0, 0, 0, 0]:
+#             #print("Move forward")
+#             move_forward()
+
+#         elif [fl, ml, mr, fr] == [0, 0, 1, 0]:
+#             #print("Adjust right")
+#             adjust_right()
+
+#         elif [fl, ml, mr, fr] == [0, 1, 0, 0]:
+#                 #print("Adjust left")
+#             adjust_left()
+
+#         elif [fl, ml, mr, fr] == [0, 1, 1, 0]:
+#             move_forward()
+
+#         else:
+#             while True:
+#                 move_forward()
+#                 distance = get_distance()
+#                 if distance <= 10: #depends how the get_distance function will return the distance
+#                     stop_motor()
+#                     pick_up()
+#                     break
+#         break
+
+def towards_box_magnet():
+    while True:
+        #distance = get_distance()
+        ml = middle_left_sensor.value()
+        mr = middle_right_sensor.value()
+        fl = front_left_sensor.value()
+        fr = front_right_sensor.value()
+
+        if [fl, ml, mr, fr] == [0, 0, 0, 0]:
+            #print("Move forward")
+            move_forward()
+
+        elif [fl, ml, mr, fr] == [0, 0, 1, 0]:
+            #print("Adjust right")
+            adjust_right()
+
+        elif [fl, ml, mr, fr] == [0, 1, 0, 0]:
+                #print("Adjust left")
+            adjust_left()
+
+        elif [fl, ml, mr, fr] == [0, 1, 1, 0]:
+            move_forward()
+
+        else:
+            while True:
+                move_forward()
+                magnet = get_magnet()
+                if magnet <= 30000 or magnet >= 45000:
+                    stop_motor()
+                    break
+        break
+
+closing_angle = 28
+raising_angle = 30
+
+def pick_up(initial_arm=0, initial_base=270):
+    arm_servo.set_angle(initial_arm+closing_angle)
+    sleep(0.5)
+    base_servo.set_angle(initial_base-raising_angle)
+
+def drop_off(initial_arm=28, initial_base=240):
+    base_servo.set_angle(initial_base+raising_angle)
+    sleep(0.5)
+    arm_servo.set_angle(initial_arm-closing_angle)
+
 

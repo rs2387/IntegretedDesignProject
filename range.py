@@ -44,15 +44,16 @@
 from utime import sleep
 from machine import Pin, SoftI2C, I2C
 
-from libs.DFRobot_TMF8x01 import DFRobot_TMF8801, DFRobot_TMF8701 #changed this to match this path
+from libs.DFRobot_TMF8x01.DFRobot_TMF8x01 import DFRobot_TMF8801, DFRobot_TMF8701
 
 def test_TMF8x01_get_distance():
     # Both options work
     # i2c_bus = SoftI2C(sda=Pin(8), scl=Pin(9), freq=100000)  # I2C0 on GP8 & GP9
-    i2c_bus = I2C(id=0, sda=0, scl=Pin(9), freq=100000) # I2C0 on GP8 & GP9
+    i2c_bus = I2C(0, sda=Pin(8), scl=Pin(9), freq=100000) # I2C0 on GP8 & GP9
     #print(i2c_bus.scan()) # 65=0x41
-    assert len(i2c_bus.scan()) == 1 # This demo requires exactly one device
-
+    #assert len(i2c_bus.scan()) == 1 # This demo requires exactly one device
+    devices = i2c_bus.scan()
+    print("I2C devices found:", devices)
 
     # Set the correct device
     device = "TMF8701"
@@ -99,6 +100,7 @@ def test_TMF8x01_get_distance():
       #tof.start_measurement(calib_m = tof.eMODE_NO_CALIB, mode = tof.eDISTANCE)
     elif device == "TMF8801":
       tof.start_measurement(calib_m = tof.eMODE_NO_CALIB)
+
     else:
        raise RuntimeError(f"Device {device} not known")
 
@@ -108,5 +110,5 @@ def test_TMF8x01_get_distance():
       sleep(0.5)
 
 
-if __name__ == "__main__":
-    test_TMF8x01_get_distance()
+
+test_TMF8x01_get_distance()
