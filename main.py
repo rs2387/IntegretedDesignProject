@@ -49,7 +49,7 @@ if __name__ == "__main__":
         return fr, mr, ml, fl
          
 
-    sleep(5)
+    sleep(8)
     count = 0
 
     while True:

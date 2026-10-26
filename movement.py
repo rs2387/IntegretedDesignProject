@@ -147,8 +147,8 @@ def reverse_after_pivot():
     #stop_motor()
     #sleep(1)
 
-# not useful right now interacts with too many lines
-def pivot_180(turn_speed=TURN_SPEED, sleeping=False):   #it goes left
+
+def pivot_180(turn_speed=TURN_SPEED, sleeping=False): 
     #stop_motor()
     #sleep(0.5)
     move_forward()
@@ -264,7 +264,7 @@ def towards_box_magnet():
                     break
         break
 
-closing_angle = 28
+closing_angle = 35
 raising_angle = 30
 
 def pick_up(initial_arm=0, initial_base=270):

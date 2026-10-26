@@ -12,5 +12,12 @@
     "python.analysis.extraPaths": [
         "~/.micropico-stubs/included"
     ],
-    "micropico.syncFolder": ""
+    "micropico.syncFolder": "",
+    "python-envs.pythonProjects": [
+        {
+            "path": "main.py",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        }
+    ]
 }
