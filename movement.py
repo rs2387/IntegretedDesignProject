@@ -2,6 +2,7 @@ from motor import Motor
 from utime import sleep
 from machine import Pin, ADC
 from servos import Servo
+from utime import ticks_ms, ticks_diff
 
 hall_effect = ADC(26)
 def get_magnet():
@@ -278,3 +279,27 @@ def drop_off(initial_arm=28, initial_base=240):
     arm_servo.set_angle(initial_arm-closing_angle)
 
 
+
+def move_and_adjust(seconds):
+    start_time = ticks_ms()
+
+    while ticks_diff(ticks_ms(), start_time) < seconds * 1000:
+        ml = middle_left_sensor.value()
+        mr = middle_right_sensor.value()
+        fl = front_left_sensor.value()
+        fr = front_right_sensor.value()
+
+        if [fl, ml, mr, fr] == [0, 0, 0, 0]:
+            move_forward()
+
+        elif [fl, ml, mr, fr] == [0, 0, 1, 0]:
+            adjust_right()
+
+        elif [fl, ml, mr, fr] == [0, 1, 0, 0]:
+            adjust_left()
+
+        else:
+            move_forward()
+
+    stop_motor()
+    sleep(0.5)
