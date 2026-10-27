@@ -72,6 +72,6 @@ current_arm_angle = 10
 
 
 
-base_servo.set_angle(270) #0 is open, 45 is perfect for grabbing
-
+base_servo.set_angle(250)#0 is open, 45 is perfect for grabbing
+arm_servo.set_angle(0)
 

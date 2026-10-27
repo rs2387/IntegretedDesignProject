@@ -33,12 +33,12 @@ button = Pin(21, Pin.IN)
 # Movement functions
 # --------------------------
 
-def move_forward(left_speed=62, right_speed=60):
+def move_forward(left_speed=60, right_speed=60):
     motor3.Forward(left_speed)
     motor4.Forward(right_speed)
 
 
-def move_back(left_speed=32, right_speed=30):
+def move_back(left_speed=30, right_speed=30):
     motor3.Reverse(left_speed)
     motor4.Reverse(right_speed)
 
@@ -48,7 +48,7 @@ def stop_motor():
     motor4.off()
 
 
-def adjust_left(speed=75, adjustment=20):
+def adjust_left(speed=70, adjustment=20):
     motor3.Forward(speed=speed - adjustment)
     motor4.Forward(speed=speed)
 
@@ -264,7 +264,7 @@ def towards_box_magnet():
                     break
         break
 
-closing_angle = 35
+closing_angle = 38
 raising_angle = 30
 
 def pick_up(initial_arm=0, initial_base=270):

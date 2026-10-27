@@ -94,6 +94,7 @@ if __name__ == "__main__":
 
 # turning out of bay 1
             elif count == 3:
+                stop_motor()
                 pick_up()
                 reverse_180()
                 move_forward()
