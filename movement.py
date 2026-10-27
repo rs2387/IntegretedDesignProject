@@ -149,11 +149,12 @@ def reverse_after_pivot():
     #sleep(1)
 
 
-def pivot_180(turn_speed=TURN_SPEED, sleeping=False): 
+def pivot_180(turn_speed=TURN_SPEED, sleeping=False, forward=True): 
     #stop_motor()
     #sleep(0.5)
-    move_forward()
-    sleep(0.5)
+    if forward:
+        move_forward()
+        sleep(0.5)
     condition1, condition2= False, False
 
     if sleeping == True:

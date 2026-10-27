@@ -116,10 +116,9 @@ if __name__ == "__main__":
                 left_pivot_90(TURN_SPEED, sleeping=True)
                 move_and_adjust(3.5)
                 drop_off()
-                move_back()
+                move_back(left_speed=70, right_speed=70)
                 sleep(1)
- 
-                pivot_180(TURN_SPEED, sleeping=True)
+                pivot_180(TURN_SPEED, sleeping=True, forward=False)
                 count += 1
 
 #exit loading bay
