@@ -5,14 +5,15 @@ from movement import (
     move_forward,
     adjust_left,
     adjust_right,
-    reverse_180,
-    pivot_180,
+    pivot_180_left,
+    pivot_180_right,
     towards_box_magnet,
     pick_up,
     drop_off,
     move_and_adjust,
     move_back
 )
+from magnet import get_magnet
 from utime import sleep
 from machine import Pin
 from motor import Motor
@@ -93,62 +94,66 @@ if __name__ == "__main__":
                 left_pivot_90(TURN_SPEED, continue_time=CONTINUE_TIME)
                 count += 1
 
-# turning out of bay 1
+# pick up box and reverse 180 
             elif count == 3:
                 move_forward()
                 sleep(0.1)
                 stop_motor()
                 pick_up()
-                reverse_180()
+                pole = get_magnet()
                 move_forward()
-                sleep(0.5)
-                left_pivot_90(TURN_SPEED, continue_time=0.6)
+                sleep(1)
+                pivot_180_left(sleeping=True)
+                count += 1
+
+# will move forward normally and adjust to line until it detects junction
+
+
+# it will turn left at the next junction and will be out of bay 1
+            elif count == 4:
+                left_pivot_90(TURN_SPEED, continue_time=1.1)
                 count += 1
 
 #skipping bay 2
-            elif count == 4:
-                move_forward()
-                sleep(SKIP_TIME)
+            elif count == 5:
+                move_and_adjust(SKIP_TIME)
                 count += 1
 
 #turn into loading bay, pick up block, then turn around
-            elif count == 5:
+            elif count == 6:
                 left_pivot_90(TURN_SPEED, sleeping=True)
                 move_and_adjust(3.5)
                 drop_off()
                 move_back(left_speed=70, right_speed=70)
                 sleep(1)
-                pivot_180(TURN_SPEED, sleeping=True, forward=False)
+                pivot_180_left(TURN_SPEED, sleeping=True, forward=False)
                 count += 1
 
 #exit loading bay
-            elif count == 6:
+            elif count == 7:
                 right_pivot_90(TURN_SPEED, continue_time=CONTINUE_TIME)
                 count += 1
 
 #skip next 2 bays
-            elif count == 7:
-                move_forward()
-                sleep(SKIP_TIME)
+            elif count == 8:
+                move_and_adjust(SKIP_TIME)
                 count += 1
 
-            elif count == 8:
-                move_forward()
-                sleep(SKIP_TIME)
+            elif count == 9:
+                move_and_adjust(SKIP_TIME)
                 count += 1
 
 #right turn
-            elif count == 9:
+            elif count == 10:
                 right_pivot_90(TURN_SPEED, continue_time=CONTINUE_TIME)
                 count += 1
 
-            elif count == 10:
-                move_forward()
-                sleep(SKIP_TIME)
+            elif count == 11:
+                move_and_adjust(SKIP_TIME)
                 count += 1
 
 #stop in centre
-            elif count == 11:
+            elif count == 12:
                 right_pivot_90(TURN_SPEED, continue_time=CONTINUE_TIME)
                 stop_motor()
                 sleep(10)

@@ -3,12 +3,17 @@ from utime import sleep
 
 hall_effect = ADC(26)
 
-while True:
-    print(hall_effect.read_u16())
-    sleep(0.2)
+
 
 def get_magnet():
-    return(hall_effect.read_u16())
+    value = hall_effect.read_u16()
+    if value < 25000:
+        pole = "south"
+    elif value > 55000:
+        pole = "north"
+    else:
+        pole = get_magnet()
+    return pole
 
 #25000 -> 40000 -> 55000
 #south is low, north is high
