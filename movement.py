@@ -268,10 +268,23 @@ def towards_box_magnet():
 closing_angle = 38
 raising_angle = 22
 
+# make pick_up function gradual rather than instant for smoothness
 def pick_up(initial_arm=0, initial_base=270):
-    arm_servo.set_angle(initial_arm+closing_angle)
-    sleep(0.5)
-    base_servo.set_angle(initial_base-raising_angle)
+    final_arm = initial_arm + closing_angle
+    final_base = initial_base - raising_angle
+    current_arm = initial_arm
+    current_base = initial_base
+    while current_arm != final_arm:
+        current_arm += 1
+        arm_servo.set_angle(current_arm)
+        sleep(0.01)
+    while current_base != final_base:
+        current_base -= 1
+        base_servo.set_angle(current_base)
+        sleep(0.01)
+
+
+
 
 def drop_off(initial_arm=28, initial_base=240):
     base_servo.set_angle(initial_base+raising_angle)
