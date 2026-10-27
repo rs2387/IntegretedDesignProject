@@ -36,7 +36,7 @@ button = Pin(21, Pin.IN)
 
 def move_forward(left_speed=60, right_speed=60):
     motor3.Forward(left_speed)
-    motor4.Forward(right_speed)
+    motor4.Forward(right_speed+3)
 
 
 def move_back(left_speed=30, right_speed=30):
@@ -49,7 +49,7 @@ def stop_motor():
     motor4.off()
 
 
-def adjust_left(speed=70, adjustment=20):
+def adjust_left(speed=73, adjustment=23):
     motor3.Forward(speed=speed - adjustment)
     motor4.Forward(speed=speed)
 
@@ -266,7 +266,7 @@ def towards_box_magnet():
         break
 
 closing_angle = 38
-raising_angle = 30
+raising_angle = 22
 
 def pick_up(initial_arm=0, initial_base=270):
     arm_servo.set_angle(initial_arm+closing_angle)

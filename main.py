@@ -9,7 +9,9 @@ from movement import (
     pivot_180,
     towards_box_magnet,
     pick_up,
-    drop_off
+    drop_off,
+    move_and_adjust,
+    move_back
 )
 from utime import sleep
 from machine import Pin
@@ -58,8 +60,7 @@ if __name__ == "__main__":
         if count == 0:
             drop_off()
             right_pivot_90(TURN_SPEED, forward=False)
-            move_forward()
-            sleep(1.5)
+            move_and_adjust(1.5)
             count = 1
             continue
 
@@ -94,6 +95,8 @@ if __name__ == "__main__":
 
 # turning out of bay 1
             elif count == 3:
+                move_forward()
+                sleep(0.1)
                 stop_motor()
                 pick_up()
                 reverse_180()
@@ -111,9 +114,10 @@ if __name__ == "__main__":
 #turn into loading bay, pick up block, then turn around
             elif count == 5:
                 left_pivot_90(TURN_SPEED, sleeping=True)
-                move_forward()
-                sleep(2)
+                move_and_adjust(3.5)
                 drop_off()
+                move_back()
+                sleep(1)
  
                 pivot_180(TURN_SPEED, sleeping=True)
                 count += 1
