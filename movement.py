@@ -213,6 +213,8 @@ def pivot_180_right(turn_speed=TURN_SPEED, sleeping=False, forward=True):
 def get_distance():
     #yet to do
     print("hello")
+    # just a random test value for now
+    return 9
 
 # def towards_box_range():
 #     while True:
@@ -307,7 +309,7 @@ def drop_off(initial_arm=28, initial_base=240):
 
 
 
-def move_and_adjust(seconds):
+def move_and_adjust(seconds, right_speed=60, left_speed=60):
     start_time = ticks_ms()
 
     while ticks_diff(ticks_ms(), start_time) < seconds * 1000:
@@ -317,7 +319,7 @@ def move_and_adjust(seconds):
         fr = front_right_sensor.value()
 
         if [fl, ml, mr, fr] == [0, 0, 0, 0]:
-            move_forward()
+            move_forward(right_speed, left_speed)
 
         elif [fl, ml, mr, fr] == [0, 0, 1, 0]:
             adjust_right()
