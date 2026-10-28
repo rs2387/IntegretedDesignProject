@@ -187,7 +187,7 @@ def left_bay_to_top_rack(count=4, bay_number=1):
     # ramp is detected
             elif count == 9:
                 #move up increasing speed by a good amount to get up the ramp
-                move_and_adjust(3, right_speed=90, left_speed=90)
+                move_and_adjust(3, right_speed=100, left_speed=100)
                 count += 1
 
     #turn into top loading rack, drop off block, then turn around
@@ -197,7 +197,8 @@ def left_bay_to_top_rack(count=4, bay_number=1):
                 drop_off()
                 move_back(left_speed=70, right_speed=70)
                 sleep(1)
-                pivot_180_left(TURN_SPEED, sleeping=True, forward=False)
+                # sleep for longer to ensure it doesnt interfere with other lines
+                pivot_180_left(TURN_SPEED, sleeping=True, forward=False, sleeping_time=2.5)
                 count += 1
 
     #exit top loading rack

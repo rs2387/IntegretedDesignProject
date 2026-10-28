@@ -128,7 +128,7 @@ def left_pivot_90(turn_speed=TURN_SPEED, forward=True, continue_time=CONTINUE_TI
     #stop_motor()
     #sleep(1)
 
-def pivot_180_left(turn_speed=TURN_SPEED, sleeping=False, forward=True): 
+def pivot_180_left(turn_speed=TURN_SPEED, sleeping=False, forward=True, sleeping_time=2.0): 
     #stop_motor()
     #sleep(0.5)
     if forward:
@@ -140,7 +140,7 @@ def pivot_180_left(turn_speed=TURN_SPEED, sleeping=False, forward=True):
         condition1, condition2 = True, True
         motor3.Reverse(speed=TURN_SPEED)
         motor4.Forward(speed=TURN_SPEED)
-        sleep(2)
+        sleep(sleeping_time)
         
         while True:
             motor3.Reverse(speed=TURN_SPEED)
@@ -169,7 +169,7 @@ def pivot_180_left(turn_speed=TURN_SPEED, sleeping=False, forward=True):
     #sleep(1)
 
 
-def pivot_180_right(turn_speed=TURN_SPEED, sleeping=False, forward=True): 
+def pivot_180_right(turn_speed=TURN_SPEED, sleeping=False, forward=True, sleeping_time=2.0): 
     #stop_motor()
     #sleep(0.5)
     if forward:
@@ -181,7 +181,7 @@ def pivot_180_right(turn_speed=TURN_SPEED, sleeping=False, forward=True):
         condition1, condition2 = True, True
         motor3.Reverse(speed=TURN_SPEED)
         motor4.Forward(speed=TURN_SPEED)
-        sleep(2)
+        sleep(sleeping_time)
         
         while True:
             motor3.Reverse(speed=TURN_SPEED)
