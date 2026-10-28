@@ -5,7 +5,7 @@ class Motor:
     def __init__(self, dirPin, PWMPin):
         self.mDir = Pin(dirPin, Pin.OUT)  # set motor direction pin
         self.pwm = PWM(Pin(PWMPin))  # set motor pwm pin
-        self.pwm.freq(1000)  # set PWM frequency
+        self.pwm.freq(200)  # set PWM frequency
         self.pwm.duty_u16(0)  # set duty cycle - 0=off
         
     def off(self):
