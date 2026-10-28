@@ -8,7 +8,7 @@ hall_effect = ADC(26)
 def get_magnet():
     value = hall_effect.read_u16()
     if value < 40500:
-        pole = "north"
+        pole = "south"
         return pole
     elif value > 42500:
         pole = "north"

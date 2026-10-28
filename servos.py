@@ -70,8 +70,10 @@ def place():
 current_arm_angle = 10 
 # need to know the current position before moving otherwise might break mechanism or servo
 
+def set_servos(arm, base):
+    arm_servo.set_angle(arm)
+    base_servo.set_angle(base)
 
-
-base_servo.set_angle(250)#0 is open, 45 is perfect for grabbing
-arm_servo.set_angle(0)
+base_servo.set_angle(230)#0 is open, 45 is perfect for grabbing
+arm_servo.set_angle(38)
 

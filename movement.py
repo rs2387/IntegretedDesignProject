@@ -145,9 +145,10 @@ def pivot_180_left(turn_speed=TURN_SPEED, sleeping=False, forward=True, sleeping
         while True:
             motor3.Reverse(speed=TURN_SPEED)
             motor4.Forward(speed=TURN_SPEED)
+
             mr = middle_right_sensor.value()
             if mr == 1:
-                #sleep(0.05)
+                
                 break
 
     elif sleeping == False:        
@@ -282,7 +283,7 @@ def towards_box_magnet():
         break
 
 closing_angle = 38
-raising_angle = 22
+raising_angle = 40
 
 # make pick_up function gradual rather than instant for smoothness
 def pick_up(initial_arm=0, initial_base=270):
@@ -332,7 +333,7 @@ def move_and_adjust(seconds, right_speed=60, left_speed=60):
 
     stop_motor()
 
-def move_until_juntion(right_speed=60, left_speed=60):
+def move_until_junction(right_speed=60, left_speed=60):
     while True:
         ml = middle_left_sensor.value()
         mr = middle_right_sensor.value()

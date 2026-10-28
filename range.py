@@ -41,8 +41,10 @@ pivot_180_left,
 pivot_180_right,
 left_pivot_90,
 right_pivot_90,
-move_until_juntion,
-move_back
+move_until_junction,
+move_back,
+pick_up,
+drop_off
 )
 from machine import Pin, I2C
 from libs.VL53L0X.VL53L0X import VL53L0X
@@ -74,50 +76,51 @@ def get_distance():
 
 def move_till_box():
     distance = get_distance()
-    while distance is not None and distance <= 50:  #mm, trial and error to find optimal distance
+    while distance is not None and distance >= 50:  #mm, trial and error to find optimal distance
         move_and_adjust(0.1)
         distance = get_distance()
     stop_motor()
 
 # will go through the bays until true is returned, meaning a box is present
 def detect_box(time, direction):
-    juntion_count = 0
+    junction_count = 0
     while True:
         junction_count += 1
         # Check the current bay
         move_and_adjust(time)
         distance = get_distance()
 
-        if distance is not None and distance <= 100:  # mm
+        if distance is not None and distance <= 150:  # mm
             stop_motor()
             return True, junction_count
 
         # No box found: turn around
-        pivot_180_left(sleeping=True)
+        pivot_180_left(sleeping=True, forward=False, sleeping_time=3)
 
         # Follow the line until the next junction
         # Replace this with your junction-detection function
         # once it is defined.
-        move_until_juntion()
+        move_until_junction()
 
         if direction == 'left':
         # Turn left into the next bay
-            left_pivot_90()
+            left_pivot_90(continue_time=1.15)
 
             move_back(left_speed=60, right_speed=60)
             sleep(0.5)
-            move_until_juntion()
-            left_pivot_90()
+            move_until_junction()
+            left_pivot_90(sleeping=True, continue_time=1.2)
 
         if direction == 'right':
             right_pivot_90()
 
             move_back(left_speed=60, right_speed=60)
             sleep(0.5)
-            move_until_juntion()
+            move_until_junction()
             right_pivot_90()
     
-
-    
-
-        
+sleep(3)
+drop_off()
+detect_box(2.2, "left")
+move_till_box()
+pick_up()        
