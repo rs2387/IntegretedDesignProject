@@ -222,7 +222,7 @@ def left_bay_to_top_rack(count=4, bay_number=1):
                 stop_motor()
                 sleep(1)
                 left_pivot_90(TURN_SPEED, sleeping=True)
-                right_pivot_90(TURN_SPEED, sleeping=True)
+                left_pivot_90(TURN_SPEED, forward=False)
                 stop_motor()
                 sleep(10)
                 break

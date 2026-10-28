@@ -331,3 +331,23 @@ def move_and_adjust(seconds, right_speed=60, left_speed=60):
             move_forward()
 
     stop_motor()
+
+def move_until_juntion(right_speed=60, left_speed=60):
+    while True:
+        ml = middle_left_sensor.value()
+        mr = middle_right_sensor.value()
+        fl = front_left_sensor.value()
+        fr = front_right_sensor.value()
+        
+        if [fl, ml, mr, fr] == [0, 0, 0, 0]:
+            move_forward(right_speed, left_speed)
+        
+        elif [fl, ml, mr, fr] == [0, 0, 1, 0]:
+            adjust_right()
+        
+        elif [fl, ml, mr, fr] == [0, 1, 0, 0]:
+            adjust_left()
+        else:
+            stop_motor()
+            break
+        

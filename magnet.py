@@ -15,5 +15,11 @@ def get_magnet():
         pole = get_magnet()
     return pole
 
+while True:
+    print(hall_effect.read_u16())
+    sleep(0.2)
+
+    
+
 #25000 -> 40000 -> 55000
 #south is low, north is high
