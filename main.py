@@ -19,6 +19,8 @@ from utime import sleep
 from machine import Pin
 from motor import Motor
 
+from led import led
+
 motor3 = Motor(dirPin=4, PWMPin=5)
 motor4 = Motor(dirPin=7, PWMPin=6)
 
@@ -31,6 +33,9 @@ front_left_sensor = Pin(21, Pin.IN)
 front_right_sensor = Pin(20, Pin.IN)
 middle_left_sensor = Pin(19, Pin.IN)
 middle_right_sensor = Pin(18, Pin.IN)
+
+
+amber_led = led(11)
 
 button = Pin(21, Pin.IN)
 
@@ -240,6 +245,7 @@ if __name__ == "__main__":
     count = 0
 
     while True:
+        amber_led.flash()
         fr, mr, ml, fl = get_sensors()
 
         if count == 0:
@@ -316,3 +322,4 @@ if __name__ == "__main__":
 
 
         sleep(0.05)
+    amber_led.off()
