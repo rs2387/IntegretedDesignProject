@@ -1,5 +1,4 @@
 from movement import (
-    get_distance,
     stop_motor,
     left_pivot_90,
     right_pivot_90,
@@ -8,17 +7,18 @@ from movement import (
     adjust_right,
     pivot_180_left,
     pivot_180_right,
-    towards_box_magnet,
     pick_up,
     drop_off,
     move_and_adjust,
-    move_back
+    move_back,
+    turn_before_pickup,
+    prep_for_drop
 )
 from magnet import get_magnet
 from utime import sleep
 from machine import Pin
 from motor import Motor
-
+from range import get_distance, move_till_box, detect_box
 from led import led
 
 motor3 = Motor(dirPin=4, PWMPin=5)
@@ -84,10 +84,12 @@ def left_bay_to_bottom_rack(count=4, bay_number=1):
         else:
             #print("junction detected")
 
-    # it will turn left at the next junction and will be out of bay 1
+    # it will turn left at the next junction and will be out of bay 1/2
             if count == 4:
                 left_pivot_90(TURN_SPEED, continue_time=1.1)
-                count += 1
+                if bay_number ==2:
+                    count += 1 # skip the skipping bay 2 elif
+                count +=1
 
     #skipping bay 2
             elif count == 5:
@@ -96,17 +98,21 @@ def left_bay_to_bottom_rack(count=4, bay_number=1):
 
     #turn into bottom loading rack, drop off block, then turn around
             elif count == 6:
-                left_pivot_90(TURN_SPEED, sleeping=True)
-                move_and_adjust(3.5)
+                rack_number = detect_box(direction='left', time=2)
+                prep_for_drop()
+                move_and_adjust(1)
                 drop_off()
                 move_back(left_speed=70, right_speed=70)
                 sleep(1)
                 pivot_180_left(TURN_SPEED, sleeping=True, forward=False)
+                # now need to ignore rack_number junctions for the way back
                 count += 1
 
     #exit loading rack
             elif count == 7:
                 right_pivot_90(TURN_SPEED, continue_time=CONTINUE_TIME)
+                # at this point we have rack_number of junctions in front of us to skip
+                move_and_adjust(4*SKIP_TIME*rack_number)
                 count += 1
 
     #skip next 2 bays
@@ -167,7 +173,15 @@ def left_bay_to_top_rack(count=4, bay_number=1):
     # it will turn right at the next junction and will be out of bay 1
             if count == 4:
                 right_pivot_90(TURN_SPEED, continue_time=1.1)
-                count += 1
+                if bay_number == 2:
+                    count += 0.5
+                elif bay_number ==1:
+                    count +=1
+
+    # if coming out of bay 2, then need to skip bay 1 entrance
+            if count == 4.5:
+                move_and_adjust(SKIP_TIME)
+                count += 0.5
 
     # turning right at the corner back the way we came
             elif count == 5:
@@ -281,28 +295,23 @@ if __name__ == "__main__":
 
 #begining of bay 1
             elif count == 2:
-                left_pivot_90(TURN_SPEED, continue_time=CONTINUE_TIME)
+                #left_pivot_90(TURN_SPEED, continue_time=CONTINUE_TIME)
+                bay_number = detect_box(time=1, dropping=False, direction="left")
+
                 count += 1
 
 # pick up box and reverse 180 
             elif count == 3:
-                move_forward()
-                sleep(0.1)
-                stop_motor()
-                # attempt to go pick it up and reverse out anyway
-
-                pick_up()
-                pole = get_magnet()
-                move_forward()
+                move_till_box(70)
                 sleep(1)
+                turn_before_pickup()
+                sleep(1)
+                move_till_box()
+                sleep(1)
+                pole = get_magnet()
+                sleep(1)
+                pick_up()
                 pivot_180_left(sleeping=True)
-
-                if get_distance() < 10:
-                    bay_number = 1
-                # otherwise, if there is no box in bay 1, continue to next bay 2
-                else:
-                    # will never be called for now
-                    bay_number = 2
 
                 count += 1
 

@@ -8,11 +8,13 @@ right_pivot_90,
 move_until_junction,
 move_back,
 pick_up,
-drop_off
+drop_off,
+turn_before_pickup
 )
 from machine import Pin, I2C
 from libs.VL53L0X.VL53L0X import VL53L0X
 from utime import sleep
+from magnet import get_magnet
 
 # Initialise the range sensor once
 i2c_bus = I2C(id=0, sda=Pin(8), scl=Pin(9), freq=100000)
@@ -38,9 +40,9 @@ def get_distance():
 
 
 
-def move_till_box():
+def move_till_box(distance_limit=50):
     distance = get_distance()
-    while distance is not None and distance >= 50:  #mm, trial and error to find optimal distance
+    while distance is not None and distance >= distance_limit:  #mm, trial and error to find optimal distance
         move_and_adjust(0.1)
         distance = get_distance()
     stop_motor()
@@ -58,12 +60,12 @@ def detect_box(time, direction, dropping=True):
         if dropping == True:
             if distance is not None and distance >= 150:  # mm
                 stop_motor()
-                return True, junction_count
+                return junction_count
 
         else:
             if distance is not None and distance <= 150:
                 stop_motor()
-                return True, junction_count
+                return junction_count
 
         # box found: turn around
         pivot_180_left(sleeping=True, forward=False, sleeping_time=3)
@@ -87,17 +89,16 @@ def detect_box(time, direction, dropping=True):
             move_until_junction()
             right_pivot_90(sleeping=True, continue_time=1.2)
 
-from magnet import get_magnet
-from movement import turn_before_pickup
 
-sleep(3)
-drop_off()
-# detect_box(2.2, "left")
+def test():
+    sleep(3)
+    drop_off()
+    # detect_box(2.2, "left")
 
-detect_box(2.2, 'left', dropping=False)
-move_till_box()
-for i in range(10):
-    pole = get_magnet()
-    sleep(0.5)
-    print(pole)
-pick_up()        
+    detect_box(2.2, 'left', dropping=False)
+    move_till_box()
+    for i in range(10):
+        pole = get_magnet()
+        sleep(0.5)
+        print(pole)
+    pick_up()        

@@ -215,6 +215,7 @@ def pivot_180_right(turn_speed=TURN_SPEED, sleeping=False, forward=True, sleepin
 
 closing_angle = 38
 raising_angle = 40
+dropping_angle = 22
 
 # make pick_up function gradual rather than instant for smoothness
 def pick_up(initial_arm=0, initial_base=270):
@@ -233,11 +234,13 @@ def pick_up(initial_arm=0, initial_base=270):
 
 
 
-
 def drop_off(initial_arm=28, initial_base=240):
     base_servo.set_angle(initial_base+raising_angle)
     sleep(0.5)
     arm_servo.set_angle(initial_arm-closing_angle)
+
+def prep_for_drop():
+    base_servo.set_angle(270-dropping_angle)
 
 def move_and_adjust(seconds, right_speed=60, left_speed=60):
     start_time = ticks_ms()
@@ -286,5 +289,3 @@ def turn_before_pickup():
     motor4.Reverse(speed=60)
     sleep(0.1)
     stop_motor()
-
-        
