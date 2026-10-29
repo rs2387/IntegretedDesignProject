@@ -18,7 +18,7 @@ from magnet import get_magnet
 from utime import sleep
 from machine import Pin
 from motor import Motor
-from range import get_distance, move_till_box, detect_box
+from range import move_till_box, detect_box
 from led import led
 
 motor3 = Motor(dirPin=4, PWMPin=5)

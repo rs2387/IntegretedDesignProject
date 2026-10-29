@@ -3,7 +3,6 @@ from utime import sleep
 from machine import Pin, ADC
 from servos import Servo
 from utime import ticks_ms, ticks_diff
-from range import get_distance
 
 
 hall_effect = ADC(26)

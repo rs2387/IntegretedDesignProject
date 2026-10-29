@@ -9,8 +9,8 @@ move_until_junction,
 move_back,
 pick_up,
 drop_off,
-turn_before_pickup
 )
+
 from machine import Pin, I2C
 from libs.VL53L0X.VL53L0X import VL53L0X
 from utime import sleep
