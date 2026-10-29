@@ -3,6 +3,8 @@ from utime import sleep
 from machine import Pin, ADC
 from servos import Servo
 from utime import ticks_ms, ticks_diff
+from range import get_distance
+
 
 hall_effect = ADC(26)
 def get_magnet():
@@ -211,77 +213,6 @@ def pivot_180_right(turn_speed=TURN_SPEED, sleeping=False, forward=True, sleepin
     #sleep(1)
 
 
-def get_distance():
-    #yet to do
-    print("hello")
-    # just a random test value for now
-    return 9
-
-# def towards_box_range():
-#     while True:
-#         #distance = get_distance()
-#         ml = middle_left_sensor.value()
-#         mr = middle_right_sensor.value()
-#         fl = front_left_sensor.value()
-#         fr = front_right_sensor.value()
-
-#         if [fl, ml, mr, fr] == [0, 0, 0, 0]:
-#             #print("Move forward")
-#             move_forward()
-
-#         elif [fl, ml, mr, fr] == [0, 0, 1, 0]:
-#             #print("Adjust right")
-#             adjust_right()
-
-#         elif [fl, ml, mr, fr] == [0, 1, 0, 0]:
-#                 #print("Adjust left")
-#             adjust_left()
-
-#         elif [fl, ml, mr, fr] == [0, 1, 1, 0]:
-#             move_forward()
-
-#         else:
-#             while True:
-#                 move_forward()
-#                 distance = get_distance()
-#                 if distance <= 10: #depends how the get_distance function will return the distance
-#                     stop_motor()
-#                     pick_up()
-#                     break
-#         break
-
-def towards_box_magnet():
-    while True:
-        #distance = get_distance()
-        ml = middle_left_sensor.value()
-        mr = middle_right_sensor.value()
-        fl = front_left_sensor.value()
-        fr = front_right_sensor.value()
-
-        if [fl, ml, mr, fr] == [0, 0, 0, 0]:
-            #print("Move forward")
-            move_forward()
-
-        elif [fl, ml, mr, fr] == [0, 0, 1, 0]:
-            #print("Adjust right")
-            adjust_right()
-
-        elif [fl, ml, mr, fr] == [0, 1, 0, 0]:
-                #print("Adjust left")
-            adjust_left()
-
-        elif [fl, ml, mr, fr] == [0, 1, 1, 0]:
-            move_forward()
-
-        else:
-            while True:
-                move_forward()
-                magnet = get_magnet()
-                if magnet <= 30000 or magnet >= 45000:
-                    stop_motor()
-                    break
-        break
-
 closing_angle = 38
 raising_angle = 40
 
@@ -307,8 +238,6 @@ def drop_off(initial_arm=28, initial_base=240):
     base_servo.set_angle(initial_base+raising_angle)
     sleep(0.5)
     arm_servo.set_angle(initial_arm-closing_angle)
-
-
 
 def move_and_adjust(seconds, right_speed=60, left_speed=60):
     start_time = ticks_ms()
@@ -351,4 +280,11 @@ def move_until_junction(right_speed=60, left_speed=60):
         else:
             stop_motor()
             break
+
+def turn_before_pickup():
+    motor3.Forward(speed=60)
+    motor4.Reverse(speed=60)
+    sleep(0.1)
+    stop_motor()
+
         
